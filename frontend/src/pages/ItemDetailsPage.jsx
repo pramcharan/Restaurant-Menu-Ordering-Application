@@ -1,6 +1,7 @@
-import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import menuData from "../data/menuData";
+import { CartContext } from "../context/CartContext";
 import "./ItemDetailsPage.css";
 
 function ItemDetailsPage() {
@@ -9,6 +10,14 @@ function ItemDetailsPage() {
   const item = menuData.find((food) => food.id === Number(id));
 
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
+
+const handleAddToCart = () => {
+  addToCart(item, quantity);
+ 
+  navigate("/orders");
+};
 
   if (!item) {
     return <h2>Food Item Not Found</h2>;
@@ -48,10 +57,11 @@ function ItemDetailsPage() {
           </button>
 
         </div>
-
-        <button className="cart-btn">
-          Add To Cart
-        </button>
+          <button
+              className="cart-btn"
+                onClick={handleAddToCart}>
+                         Add To Cart
+          </button>
 
       </div>
 

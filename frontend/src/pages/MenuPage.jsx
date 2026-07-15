@@ -2,6 +2,7 @@ import { useState } from "react";
 import MenuCard from "../components/MenuCard";
 import menuData from "../data/menuData";
 import "./MenuPage.css";
+import Navbar from "../components/Navbar";
 
 function MenuPage() {
   const [category, setCategory] = useState("All");
@@ -19,9 +20,11 @@ function MenuPage() {
   });
 
   return (
+    <>
+    <Navbar/>
     <div className="menu-container">
 
-      <h1>🍽 Luxe Bistro</h1>
+      
 
       <input
         className="search-box"
@@ -46,6 +49,7 @@ function MenuPage() {
       </div>
 
     </div>
+    </>
   );
 }
 
