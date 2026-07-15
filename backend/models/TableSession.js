@@ -33,8 +33,8 @@ const tableSessionSchema = new mongoose.Schema(
     }
 );
 
-tableSessionSchema.pre('validate', function() {
-    if (!this.sessionId) {
+tableSessionSchema.pre('validate', function(){
+    if(!this.sessionId){
         this.sessionId = crypto.randomBytes(12).toString('hex');
     }
 });

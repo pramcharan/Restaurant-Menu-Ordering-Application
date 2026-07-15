@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import MenuItem from "./models/MenuItem.js";
@@ -118,19 +119,16 @@ const menuItems = [
   },
 ];
 const seedMenu = async () => {
-  try {
+  try{
     await connectDB();
-
     await MenuItem.deleteMany();
-
     await MenuItem.insertMany(menuItems);
-
     console.log("Menu seeded successfully");
 
     process.exit();
 
-  } catch (error) {
-    console.log("Seed error:", error);
+  }catch(error){
+    console.error("Database seeding failed:", error);
     process.exit(1);
   }
 };

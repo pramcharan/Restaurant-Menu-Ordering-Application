@@ -10,7 +10,7 @@ const menuItemSchema = new mongoose.Schema(
         description: {
             type: String,
             trim: true,
-            default: " "
+            default: ""
         },
         price: {
             type: Number,
@@ -24,7 +24,7 @@ const menuItemSchema = new mongoose.Schema(
         },
         imageUrl: {
             type: String,
-            default: " "
+            default: ""
         },
         available: {
             type: Boolean,

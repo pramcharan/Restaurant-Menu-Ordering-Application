@@ -1,5 +1,6 @@
 import Order from "../models/Order.js";
 import MenuItem from "../models/MenuItem.js";
+import mongoose from "mongoose";
 
 export const placeOrder = async (req, res, next) => {
     try{
@@ -23,6 +24,12 @@ export const placeOrder = async (req, res, next) => {
         let totalAmount = 0;
         const orderItems = [];
         for(const cartItem of items){
+            if(!cartItem.menuItemId || !mongoose.Types.ObjectId.isValid(cartItem.menuItemId)){
+                const error = new Error(`Invalid menu item ID: ${cartItem.menuItemId}`);
+                error.statusCode = 400;
+                return next(error);
+            }
+
             const menuItem = await MenuItem.findById(cartItem.menuItemId);
 
             if(!menuItem){
@@ -38,6 +45,12 @@ export const placeOrder = async (req, res, next) => {
             }
 
             const quantity = cartItem.quantity || 1;
+            if(quantity < 1){
+                const error = new Error(`Quantity must be at least 1 for item "${menuItem.name}"`);
+                error.statusCode = 400;
+                return next(error);
+            }
+
             const itemTotal = menuItem.price * quantity;
             totalAmount += itemTotal;
             orderItems.push({
@@ -67,6 +80,12 @@ export const placeOrder = async (req, res, next) => {
 
 export const getOrderById = async (req, res, next) => {
     try{
+        if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+            const error = new Error("Invalid order ID format");
+            error.statusCode = 400;
+            return next(error);
+        }
+
         const order = await Order.findById(req.params.id);
 
         if(!order){
@@ -115,6 +134,12 @@ export const getAllOrders = async (req, res, next) => {
 export const updateOrderStatus = async (req, res, next) => {
     try{
         const {status} = req.body;
+
+        if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+            const error = new Error("Invalid order ID format");
+            error.statusCode = 400;
+            return next(error);
+        }
 
         const validStatuses = ["Pending", "Preparing", "Served", "Cancelled"];
         if(!validStatuses.includes(status)){
