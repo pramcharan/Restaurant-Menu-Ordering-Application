@@ -11,7 +11,7 @@ router.route('/:id')
   .get(getOrderById);
 
 router.route('/:id/status')
-    .patch(updateOrderStatus);
+  .patch(updateOrderStatus);
 
 router.route('/table/:tableNumber')
   .get(getOrdersByTable);

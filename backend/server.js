@@ -15,10 +15,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/api/health', (req, res) => {
-    res.status(200).json({ message: 'API is healthy' });
-});
-
 app.use('/api/menu', menuRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/table', tableRoutes);
