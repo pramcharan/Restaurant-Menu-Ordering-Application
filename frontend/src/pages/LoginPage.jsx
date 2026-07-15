@@ -13,7 +13,7 @@ function LoginPage() {
     }
 
     localStorage.setItem("tableNo", tableNo);
-    navigate("/menu");
+   navigate("/table-session");
   };
 
   return (

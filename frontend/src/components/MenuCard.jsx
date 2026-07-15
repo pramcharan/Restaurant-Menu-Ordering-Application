@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
-
+import { imageMap } from "../utils/imageMap";
 function MenuCard({ item }) {
   return (
     <div className="card">
-      <img src={item.image} alt={item.name} />
+   <img
+  src={imageMap[item.imageUrl]}
+  alt={item.name}
+/>
 
       <h3>{item.name}</h3>
 
@@ -11,7 +14,7 @@ function MenuCard({ item }) {
 
       <h2>₹{item.price}</h2>
 
-      <Link to={`/item/${item.id}`}>
+     <Link to={`/item/${item._id}`}>
         <button>View Details</button>
       </Link>
     </div>

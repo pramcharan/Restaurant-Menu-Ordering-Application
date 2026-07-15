@@ -5,61 +5,70 @@ export const CartContext = createContext();
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
 
+  // Add item to cart
   const addToCart = (item, quantity) => {
-    const existingItem = cart.find((food) => food.id === item.id);
+    const existingItem = cart.find(
+      (food) => food._id === item._id
+    );
 
     if (existingItem) {
       setCart(
         cart.map((food) =>
-          food.id === item.id
-            ? { ...food, quantity: food.quantity + quantity }
+          food._id === item._id
+            ? {
+                ...food,
+                quantity: food.quantity + quantity,
+              }
             : food
         )
       );
     } else {
-      setCart([...cart, { ...item, quantity }]);
+      setCart([
+        ...cart,
+        {
+          ...item,
+          quantity,
+        },
+      ]);
     }
   };
 
-
-
-
-  // INCREASE QUANTITY
-  const increaseQuantity = (id) => {
-
+  // Increase quantity
+  const increaseQuantity = (_id) => {
     setCart(
       cart.map((food) =>
-        food.id === id
+        food._id === _id
           ? {
               ...food,
-              quantity: food.quantity + 1
+              quantity: food.quantity + 1,
             }
           : food
       )
     );
-
   };
 
-
-  // DECREASE QUANTITY
-  const decreaseQuantity = (id) => {
-
+  // Decrease quantity
+  const decreaseQuantity = (_id) => {
     setCart(
       cart.map((food) =>
-        food.id === id && food.quantity > 1
+        food._id === _id && food.quantity > 1
           ? {
               ...food,
-              quantity: food.quantity - 1
+              quantity: food.quantity - 1,
             }
           : food
       )
     );
-
-  };
-  const removeFromCart = (id) => {
-    setCart(cart.filter((food) => food.id !== id));
   };
 
+  // Remove item
+  const removeFromCart = (_id) => {
+    setCart(
+      cart.filter((food) => food._id !== _id)
+    );
+  };
+
+  // Clear cart
   const clearCart = () => {
     setCart([]);
   };
@@ -69,10 +78,10 @@ export function CartProvider({ children }) {
       value={{
         cart,
         addToCart,
+        increaseQuantity,
+        decreaseQuantity,
         removeFromCart,
         clearCart,
-          increaseQuantity,
-        decreaseQuantity
       }}
     >
       {children}
