@@ -1,14 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import MenuCard from "../components/MenuCard";
-import menuData from "../data/menuData";
 import "./MenuPage.css";
 import Navbar from "../components/Navbar";
 
 function MenuPage() {
+  const [menu, setMenu] = useState([]);
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
 
-  const filteredItems = menuData.filter((item) => {
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/menu"
+        );
+
+        setMenu(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchMenu();
+  }, []);
+
+  const filteredItems = menu.filter((item) => {
     const matchCategory =
       category === "All" || item.category === category;
 
@@ -21,34 +38,30 @@ function MenuPage() {
 
   return (
     <>
-    <Navbar/>
-    <div className="menu-container">
+      <Navbar />
 
-      
+      <div className="menu-container">
 
-      <input
-        className="search-box"
-        type="text"
-        placeholder="Search Food..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+        <input
+          className="search-box"
+          type="text"
+          placeholder="Search Food..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+<div className="categories">
+  <button onClick={() => setCategory("All")}>All</button>
+  <button onClick={() => setCategory("Food")}>Food</button>
+  <button onClick={() => setCategory("Drink")}>Drink</button>
+  <button onClick={() => setCategory("Dessert")}>Dessert</button>
+</div>
+        <div className="card-grid">
+          {filteredItems.map((item) => (
+            <MenuCard key={item._id} item={item} />
+          ))}
+        </div>
 
-      <div className="categories">
-        <button onClick={() => setCategory("All")}>All</button>
-        <button onClick={() => setCategory("Starters")}>Starters</button>
-        <button onClick={() => setCategory("Main Course")}>Main Course</button>
-        <button onClick={() => setCategory("Beverages")}>Beverages</button>
-        <button onClick={() => setCategory("Desserts")}>Desserts</button>
       </div>
-
-      <div className="card-grid">
-        {filteredItems.map((item) => (
-          <MenuCard key={item.id} item={item} />
-        ))}
-      </div>
-
-    </div>
     </>
   );
 }

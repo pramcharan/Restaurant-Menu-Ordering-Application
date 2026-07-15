@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import "./OrdersPage.css";
 import axios from "axios";
+import { imageMap } from "../utils/imageMap";
 
 
 function OrdersPage() {
@@ -22,12 +23,17 @@ function OrdersPage() {
   );
 
   const placeOrder = async () => {
+const sessionId = localStorage.getItem("sessionId");
+const tableNumber = localStorage.getItem("tableNumber");
 
-  const orderData = {
-    items: cart,
-    totalAmount: grandTotal,
-    orderDate: new Date()
-  };
+const orderData = {
+  tableNumber,
+  sessionId,
+  items: cart.map((item) => ({
+    menuItemId: item._id,
+    quantity: item.quantity,
+  })),
+};
 
   try {
 
@@ -42,13 +48,15 @@ function OrdersPage() {
 
     navigate("/menu");
 
-  } catch(error) {
+  } catch (error) {
+  console.log(error.response?.data);
+  console.log(error.response?.status);
+  console.log(error);
 
-    console.log(error);
-    alert("Order Failed");
-
-  }
-
+  alert(
+    error.response?.data?.message || "Order Failed"
+  );
+}
 };
 
   return (
@@ -60,13 +68,13 @@ function OrdersPage() {
       ) : (
         <>
           {cart.map((item) => (
-          <div key={item.id} className="order-card">
+          <div key={item._id} className="order-card">
             
-              <img
-                src={item.image}
-                alt={item.name}
-                width="150"
-              />
+             <img
+              src={imageMap[item.imageUrl]}
+              alt={item.name}
+              width="150"
+             />
            <div className="order-details">
              <h2>{item.name}</h2>
              <p>Price : ₹{item.price}</p>
@@ -74,14 +82,14 @@ function OrdersPage() {
 
             <button
               className="qty-btn"
-             onClick={() => decreaseQuantity(item.id)} >
+             onClick={() => decreaseQuantity(item._id)} >
                   -       </button>
 
            <span>{item.quantity}</span>
 
             <button
              className="qty-btn"
-             onClick={() => increaseQuantity(item.id)}>
+             onClick={() => increaseQuantity(item._id)}>
                      +
               </button>
 
@@ -89,7 +97,7 @@ function OrdersPage() {
             <p>Total : ₹{item.price * item.quantity}</p>
              <button
                className="remove-btn"
-               onClick={() => removeFromCart(item.id)} >Remove Item
+               onClick={() => removeFromCart(item._id)} >Remove Item
               </button>
 
             </div>
