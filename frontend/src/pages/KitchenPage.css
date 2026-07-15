@@ -1,0 +1,135 @@
+body {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  background: #111;
+}
+
+.kitchen-container {
+  min-height: 100vh;
+  background: #111;
+  padding: 40px;
+}
+
+.kitchen-container h1 {
+  color: #D4AF37;
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.kitchen-card {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.order-section,
+.status-section {
+  background: #1d1d1d;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 0 15px rgba(212,175,55,0.25);
+}
+
+.order-section {
+  flex: 2;
+}
+
+.status-section {
+  flex: 1;
+  text-align: center;
+}
+
+.order-section h2,
+.status-section h2 {
+  color: #D4AF37;
+}
+
+.order-section h3,
+.status-section h3 {
+  color: white;
+}
+
+.order-section p {
+  color: white;
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.items-list {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #333;
+  color: white;
+}
+
+.total {
+  font-size: 22px;
+  color: #D4AF37;
+  margin-top: 20px;
+}
+
+.status-box {
+  background: #2b2b2b;
+  padding: 25px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+.status-box h2 {
+  font-size: 32px;
+  color: #D4AF37;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.status-btn,
+.cancel-btn {
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.status-btn {
+  background: #D4AF37;
+  color: #111;
+}
+
+.status-btn:hover {
+  background: orange;
+}
+
+.cancel-btn {
+  background: crimson;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: red;
+}
+
+@media (max-width: 768px) {
+  .kitchen-card {
+    flex-direction: column;
+  }
+
+  .status-box h2 {
+    font-size: 26px;
+  }
+}
