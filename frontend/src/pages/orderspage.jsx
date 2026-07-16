@@ -37,16 +37,14 @@ const orderData = {
 
   try {
 
-    await axios.post(
-      "http://localhost:5000/api/orders",
-      orderData
-    );
+   const response = await axios.post(
+   "http://localhost:5000/api/orders",
+   orderData
+);
 
-    alert("Order Placed Successfully!");
+clearCart();
 
-    clearCart();
-
-    navigate("/menu");
+navigate(`/kitchen/${response.data.data._id}`);
 
   } catch (error) {
   console.log(error.response?.data);
