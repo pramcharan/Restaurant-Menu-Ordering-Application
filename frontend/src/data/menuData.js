@@ -39,7 +39,7 @@ const menuData = [
   },
   {
     id: 4,
-    name: "Paneer Butter Masala",
+    name: "Paneer Masala",
     category: "Main Course",
     price: 320,
     description: "Paneer cooked in creamy tomato gravy.",
@@ -103,7 +103,7 @@ const menuData = [
   },
   {
     id: 12,
-    name: "Brownie with Ice Cream",
+    name: "Brownie",
     category: "Desserts",
     price: 180,
     description: "Chocolate brownie served with vanilla ice cream.",
