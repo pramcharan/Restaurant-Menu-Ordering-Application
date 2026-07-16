@@ -5,6 +5,8 @@ import MenuPage from "./pages/MenuPage";
 import ItemDetailsPage from "./pages/ItemDetailsPage";
 import OrdersPage from "./pages/OrdersPage";
 
+import KitchenPage from "./pages/KitchenPage";
+
 function App() {
   return (
     <Routes>
@@ -13,6 +15,8 @@ function App() {
       <Route path="/menu" element={<MenuPage />} />
       <Route path="/item/:id" element={<ItemDetailsPage />} />
       <Route path="/orders" element={<OrdersPage />} />
+
+      <Route path="/kitchen/:id" element={<KitchenPage />} />
     </Routes>
   );
 }
