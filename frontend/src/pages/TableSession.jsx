@@ -1,57 +1,67 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { FaUtensils } from "react-icons/fa";
+import { createTableSession } from "../services/api";
 import "./TableSession.css";
 
 function TableSession() {
-  const [tableNumber, setTableNumber] = useState("");
+  const [tableNumber, setTableNumber] = useState(
+    localStorage.getItem("tableNumber") || ""
+  );
   const [customerName, setCustomerName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const navigate = useNavigate();
 
   const createSession = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
+    setLoading(true);
 
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/table/session",
-        {
-          tableNumber,
-          customerName,
-          phoneNumber,
-        }
-      );
+    try{
+      const response = await createTableSession({
+        tableNumber,
+        customerName,
+        phoneNumber,
+      });
 
       const session = response.data.data;
 
       localStorage.setItem("sessionId", session.sessionId);
       localStorage.setItem("tableNumber", session.tableNumber);
 
-      alert("Table Session Created Successfully!");
-
       navigate("/menu");
-    } catch (error) {
-      console.error(error);
-      alert(
-        error.response?.data?.message ||
-        "Failed to create table session"
+    }catch(error){
+      console.error("Failed to create table session:", error);
+      setErrorMsg(
+        error.response?.data?.error || "Failed to create table session"
       );
+    }finally{
+      setLoading(false);
     }
   };
 
-  return (
+  return(
     <div className="session-container">
       <div className="session-card">
 
-        <h1>🍽 Luxe Bistro</h1>
+        <h1 style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+          <FaUtensils style={{ fontSize: "28px" }} /> Luxe Bistro
+        </h1>
 
-        <h3>Digital Menu & Table Ordering</h3>
+        <h3>Digital Menu &amp; Table Ordering</h3>
 
         <p>Enter your table details to begin ordering.</p>
 
-        <form onSubmit={createSession}>
+        {errorMsg && (
+          <p className="error-msg" style={{ color: "red", marginBottom: "8px" }}>
+            {errorMsg}
+          </p>
+        )}
 
+        <form onSubmit={createSession}>
           <input
             type="text"
             placeholder="Enter Table Number"
@@ -74,12 +84,11 @@ function TableSession() {
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
 
-          <button className="start-btn" type="submit">
-            Start Ordering
+          <button className="start-btn" type="submit" disabled={loading}>
+            {loading ? "Creating Session..." : "Start Ordering"}
           </button>
 
         </form>
-
       </div>
     </div>
   );

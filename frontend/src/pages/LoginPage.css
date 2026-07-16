@@ -59,3 +59,14 @@ font-weight:bold;
 .login-box button:hover{
 background:orange;
 }
+
+@media (max-width: 480px){
+  .login-box {
+    width: 90%;
+    padding: 25px;
+  }
+
+  .login-box h1 {
+    font-size: 26px;
+  }
+}

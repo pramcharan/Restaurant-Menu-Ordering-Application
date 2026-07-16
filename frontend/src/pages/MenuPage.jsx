@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { getMenuItems } from "../services/api";
 import MenuCard from "../components/MenuCard";
 import "./MenuPage.css";
 import Navbar from "../components/Navbar";
@@ -8,17 +8,21 @@ function MenuPage() {
   const [menu, setMenu] = useState([]);
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     const fetchMenu = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/menu"
-        );
-
+      setLoading(true);
+      setErrorMsg("");
+      try{
+        const response = await getMenuItems();
         setMenu(response.data.data);
-      } catch (error) {
-        console.error(error);
+      }catch(error){
+        console.error("Failed to fetch menu:", error);
+        setErrorMsg("Failed to load menu. Please try again.");
+      }finally{
+        setLoading(false);
       }
     };
 
@@ -36,7 +40,7 @@ function MenuPage() {
     return matchCategory && matchSearch;
   });
 
-  return (
+  return(
     <>
       <Navbar />
 
@@ -49,12 +53,23 @@ function MenuPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-<div className="categories">
-  <button onClick={() => setCategory("All")}>All</button>
-  <button onClick={() => setCategory("Food")}>Food</button>
-  <button onClick={() => setCategory("Drink")}>Drink</button>
-  <button onClick={() => setCategory("Dessert")}>Dessert</button>
-</div>
+
+        <div className="categories">
+          <button onClick={() => setCategory("All")}>All</button>
+          <button onClick={() => setCategory("Food")}>Food</button>
+          <button onClick={() => setCategory("Drink")}>Drink</button>
+          <button onClick={() => setCategory("Dessert")}>Dessert</button>
+          <button onClick={() => setCategory("Other")}>Other</button>
+        </div>
+
+        {loading && <p className="status-msg">Loading menu...</p>}
+
+        {errorMsg && <p className="status-msg error-text">{errorMsg}</p>}
+
+        {!loading && !errorMsg && filteredItems.length === 0 && (
+          <p className="status-msg">No items found.</p>
+        )}
+
         <div className="card-grid">
           {filteredItems.map((item) => (
             <MenuCard key={item._id} item={item} />

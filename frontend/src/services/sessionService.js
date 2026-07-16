@@ -1,12 +1,6 @@
-import axios from "axios";
+import { createTableSession } from "./api";
 
 export const createSession = async (tableNumber) => {
-  const response = await axios.post(
-    "http://localhost:5000/api/table/session",
-    {
-      tableNumber,
-    }
-  );
-
+  const response = await createTableSession({ tableNumber });
   return response.data.data;
 };

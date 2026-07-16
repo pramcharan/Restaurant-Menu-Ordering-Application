@@ -2,16 +2,15 @@ import { createContext, useState } from "react";
 
 export const CartContext = createContext();
 
-export function CartProvider({ children }) {
+export function CartProvider({ children }){
   const [cart, setCart] = useState([]);
 
-  // Add item to cart
   const addToCart = (item, quantity) => {
     const existingItem = cart.find(
       (food) => food._id === item._id
     );
 
-    if (existingItem) {
+    if(existingItem){
       setCart(
         cart.map((food) =>
           food._id === item._id
@@ -33,7 +32,6 @@ export function CartProvider({ children }) {
     }
   };
 
-  // Increase quantity
   const increaseQuantity = (_id) => {
     setCart(
       cart.map((food) =>
@@ -47,7 +45,6 @@ export function CartProvider({ children }) {
     );
   };
 
-  // Decrease quantity
   const decreaseQuantity = (_id) => {
     setCart(
       cart.map((food) =>
@@ -61,19 +58,17 @@ export function CartProvider({ children }) {
     );
   };
 
-  // Remove item
   const removeFromCart = (_id) => {
     setCart(
       cart.filter((food) => food._id !== _id)
     );
   };
 
-  // Clear cart
   const clearCart = () => {
     setCart([]);
   };
 
-  return (
+  return(
     <CartContext.Provider
       value={{
         cart,

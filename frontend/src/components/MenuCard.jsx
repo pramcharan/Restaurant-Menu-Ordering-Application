@@ -7,7 +7,6 @@ function MenuCard({ item }) {
   src={imageMap[item.imageUrl]}
   alt={item.name}
 />
-
       <h3>{item.name}</h3>
 
       <p>{item.description}</p>

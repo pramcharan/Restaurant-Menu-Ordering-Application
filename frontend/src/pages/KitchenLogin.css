@@ -1,0 +1,74 @@
+.kitchen-login-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #111;
+  padding: 20px;
+}
+
+.kitchen-login-box{
+  background: #1d1d1d;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  border: 1px solid #333;
+}
+
+.kitchen-login-box h1{
+  color: #D4AF37;
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.kitchen-login-box p{
+  color: #ccc;
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.kitchen-login-box input{
+  width: 100%;
+  padding: 15px;
+  font-size: 24px;
+  text-align: center;
+  letter-spacing: 12px;
+  background: #2b2b2b;
+  border: 1px solid #444;
+  color: #fff;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.kitchen-login-box input:focus{
+  outline: none;
+  border-color: #D4AF37;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+}
+
+.kitchen-login-box button{
+  width: 100%;
+  padding: 14px;
+  background: #D4AF37;
+  color: #111;
+  border: none;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.kitchen-login-box button:hover{
+  background: orange;
+  transform: translateY(-2px);
+}
+
+.kitchen-login-box button:active{
+  transform: scale(0.98);
+}
