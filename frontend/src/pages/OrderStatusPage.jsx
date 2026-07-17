@@ -5,8 +5,8 @@ import { getOrderById, updateOrderStatus } from "../services/api";
 import { showAlert, showConfirm } from "../utils/swal";
 import "./OrderStatusPage.css";
 
-function OrderStatusPage(){
-  const {id} = useParams();
+function OrderStatusPage() {
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [order, setOrder] = useState(null);
@@ -14,10 +14,10 @@ function OrderStatusPage(){
   const [cancelling, setCancelling] = useState(false);
 
   const fetchOrder = useCallback(async () => {
-    try{
+    try {
       const response = await getOrderById(id);
       setOrder(response.data.data);
-    }catch(error){
+    } catch (error) {
       console.error("Failed to fetch order status:", error);
       setErrorMsg("Failed to load order status details.");
     }
@@ -29,7 +29,7 @@ function OrderStatusPage(){
 
   useEffect(() => {
     const status = order?.status;
-    if(status === "Served" || status === "Cancelled"){
+    if (status === "Served" || status === "Cancelled") {
       return;
     }
     const interval = setInterval(() => {
@@ -41,10 +41,12 @@ function OrderStatusPage(){
 
   useEffect(() => {
     const status = order?.status;
-    if(status === "Served" || status === "Cancelled"){
+    if (status === "Served" || status === "Cancelled") {
       const timer = setTimeout(() => {
         localStorage.removeItem("lastOrderId");
-        navigate("/menu");
+        localStorage.removeItem("sessionId");
+        localStorage.removeItem("tableNumber");
+        navigate("/");
       }, 5000);
 
       return () => clearTimeout(timer);
@@ -53,44 +55,44 @@ function OrderStatusPage(){
 
   const handleCancelOrder = async () => {
     const confirmed = await showConfirm("Cancel Order", "Are you sure you want to cancel this order?");
-    if(!confirmed){
+    if (!confirmed) {
       return;
     }
 
     setCancelling(true);
-    try{
+    try {
       await updateOrderStatus(id, "Cancelled");
       fetchOrder();
       showAlert("Order Cancelled", "Your order was successfully cancelled.", "success");
-    }catch(error){
+    } catch (error) {
       console.error("Failed to cancel order:", error);
       showAlert("Cancellation Failed", error.response?.data?.error || "Failed to cancel order", "error");
-    }finally{
+    } finally {
       setCancelling(false);
     }
   };
 
   const getStepClass = (stepName) => {
-    if(!order){
+    if (!order) {
       return "";
     }
     const statuses = ["Pending", "Preparing", "Served"];
     const currentIdx = statuses.indexOf(order.status);
     const stepIdx = statuses.indexOf(stepName);
 
-    if(order.status === "Cancelled"){
+    if (order.status === "Cancelled") {
       return "step-cancelled";
     }
-    if(currentIdx >= stepIdx){
+    if (currentIdx >= stepIdx) {
       return "step-completed";
     }
     return "step-upcoming";
   };
 
-  if(errorMsg){
+  if (errorMsg) {
     return <h2 className="status-error-text">{errorMsg}</h2>;
   }
-  if(!order){
+  if (!order) {
     return <h2 className="status-loading-text">Loading status...</h2>;
   }
 
@@ -138,11 +140,11 @@ function OrderStatusPage(){
           )}
           {order.status === "Served" && (
             <p className="success-text" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <MdCheckCircle /> Served! Enjoy your food. Redirecting to menu in 5 seconds...
+              <MdCheckCircle /> Served! Enjoy your food. Redirecting in 5 seconds...
             </p>
           )}
           {order.status === "Cancelled" && (
-            <p className="danger-text">Redirecting to menu in 5 seconds...</p>
+            <p className="danger-text">Redirecting in 5 seconds...</p>
           )}
         </div>
 
@@ -178,9 +180,20 @@ function OrderStatusPage(){
           </p>
         )}
 
-        <button className="back-menu-btn" onClick={() => navigate("/menu")}>
-          Back to Menu
-        </button>
+        {order.status === "Served" || order.status === "Cancelled" ? (
+          <button className="back-menu-btn" onClick={() => {
+            localStorage.removeItem("lastOrderId");
+            localStorage.removeItem("sessionId");
+            localStorage.removeItem("tableNumber");
+            navigate("/");
+          }}>
+            Select New Table
+          </button>
+        ) : (
+          <button className="back-menu-btn" onClick={() => navigate("/menu")}>
+            Back to Menu
+          </button>
+        )}
       </div>
     </div>
   );
